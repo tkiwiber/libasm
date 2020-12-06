@@ -1,11 +1,17 @@
 NAME	=	libasm.a
 
-SRCS	=	hello.s \
-			ft_strlen.s \
+BIN		= 	run_libasm		
+HEADER	= 	libasm.h
+
+SRC		=	ft_strlen \
+			ft_strcpy \
+			ft_write	\
+			
 
 ASM		= 	/usr/local/bin/nasm
 
-OBJS = $(SRCS:.s=.o)
+FIL = $(addsuffix .s, $(addprefix srcs/, $(SRC)))
+OBJS = $(FIL:.s=.o)
 
 %.o	: %.s
 	$(ASM) -fmacho64 $< -o $@
@@ -19,14 +25,14 @@ clean:
 	rm -f $(OBJS)
 
 run: all
-	@touch test
-	@echo "Ceci est un test" > test
-	@gcc -g -Wall -Wextra -Werror -I./libasm.h libasm.a main.c -o run_libasm
+	@gcc -Wall -Wextra -Werror -I./$(HEADER) libasm.a main.c -o $(BIN)
 	@./run_libasm
 
 fclean: clean
 	@rm -f $(NAME)
-	@rm -f run_libasm
-	@rm -f test
+	@rm -f $(BIN)
 
 re: fclean all
+
+norm:
+	norminette $(FIL) main.c $(HEADER)
