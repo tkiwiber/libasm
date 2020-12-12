@@ -3,11 +3,13 @@ NAME	=	libasm.a
 BIN		= 	run_libasm		
 HEADER	= 	libasm.h
 
-SRC		=	ft_strlen \
-			ft_strcpy \
+SRC		=	ft_strlen 	\
+			ft_strcpy 	\
 			ft_write	\
+			ft_strcmp	\
+			ft_read		\
+			ft_strdup	\
 			
-
 ASM		= 	/usr/local/bin/nasm
 
 FIL = $(addsuffix .s, $(addprefix srcs/, $(SRC)))

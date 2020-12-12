@@ -1,20 +1,20 @@
-global _ft_strcpy
+global 			_ft_strcpy
 
-section .text
+section 		.text
 
 _ft_strcpy:
-	push	rdi				; push pointer for later
-	xor		rcx, rcx		; clear rcx 
+			push	rdi				; push pointer for later
+			xor		rcx, rcx		; clear RCX 
 
 copy:
-	mov cl, byte [rsi]		; moving byte to rcx (cl)
-	mov byte [rdi], cl
-	cmp cl, 0
-	je exitstrcpy
-	add rsi, 1
-	add rdi, 1
-	jmp copy
+			mov cl, byte [rsi]		; moving byte to RCX (CL)
+			mov byte [rdi], cl		; copy byte to *dest
+			cmp cl, 0				; check if end of string
+			je exit					; jump to exit if ZF=0
+			inc rsi					; *src++
+			inc rdi					; *dest++
+			jmp copy				; next iteration
 
-exitstrcpy:
-	pop rax					; pop pointer into rax for return
-	ret
+exit:
+			pop rax					; pop pointer into rax for return
+			ret
