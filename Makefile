@@ -1,6 +1,7 @@
 NAME	=	libasm.a
 
 BIN		= 	run_libasm		
+
 HEADER	= 	libasm.h
 
 SRC		=	ft_strlen 	\
@@ -12,11 +13,16 @@ SRC		=	ft_strlen 	\
 			
 ASM		= 	/usr/local/bin/nasm
 
+CC		=	gcc
+
+CFLAGS	=	-Wall -Wextra -Werror
+
 FIL = $(addsuffix .s, $(addprefix srcs/, $(SRC)))
+
 OBJS = $(FIL:.s=.o)
 
 %.o	: %.s
-	$(ASM) -fmacho64 $< -o $@
+	$(ASM) -g -fmacho64 $< -o $@
 
 $(NAME): $(OBJS) 
 	ar rcs $(NAME) $(OBJS)
@@ -27,7 +33,7 @@ clean:
 	rm -f $(OBJS)
 
 run: all
-	@gcc -Wall -Wextra -Werror -I./$(HEADER) libasm.a main.c -o $(BIN)
+	@$(CC) -g -save-temps $(CFLAGS) -I./$(HEADER) libasm.a main.c -o $(BIN)
 	@./run_libasm
 
 fclean: clean
@@ -38,3 +44,7 @@ re: fclean all
 
 norm:
 	norminette $(FIL) main.c $(HEADER)
+
+debug:
+	$(CC) -g -o disassembly.S $(CFLAGS) -S main.c
+	objdump -d $(OBJS) -l > main.S

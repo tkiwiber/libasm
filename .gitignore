@@ -2,8 +2,9 @@
 .DS_Store
 .vscode/
 
-# Prerequisites
+# Prerequisites and Debug
 *.d
+*.S
 
 # Object files
 *.o
@@ -40,6 +41,7 @@
 *.i*86
 *.x86_64
 *.hex
+run_libasm
 
 # Debug files
 *.dSYM/

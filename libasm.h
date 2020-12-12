@@ -6,7 +6,7 @@
 /*   By: tkiwiber <alex_orlov@goodiez.app>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 11:28:27 by tkiwiber          #+#    #+#             */
-/*   Updated: 2020/12/11 16:36:04 by tkiwiber         ###   ########.fr       */
+/*   Updated: 2020/12/12 18:32:38 by tkiwiber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ size_t		ft_strlen(const char *str);
 char		*ft_strcpy(char *dst, const char *src);
 int			ft_strcmp(const char *s1, const char *s2);
 ssize_t		ft_write(int fildes, const void *buf, size_t nbyte);
-
-int			ft_strlen_test(char *str);
-int			ft_strcpy_test(char *src);
-int			ft_strcmp_test(char *s1, char *s2);
+ssize_t		ft_read(int fildes, void *buf, size_t nbyte);
+char		*ft_strdup(const char *s1);
 
 #endif

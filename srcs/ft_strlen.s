@@ -11,7 +11,7 @@ _ft_strlen:
 			dec		rcx			; RCX = -1 or 0ffffffffffffffffh
 			xor		eax, eax	; RAX = 0 for what to be found (AL)
 find:
-			repne scasb			; scan the memory to find AL
+			repne 	scasb		; scan the memory to find AL
 			sub		rdi, rsi	; count diff between start/end index's
 			dec		rdi			; remove /0 simbol
 exit:
