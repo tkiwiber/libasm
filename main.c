@@ -6,7 +6,7 @@
 /*   By: tkiwiber <alex_orlov@goodiez.app>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 11:55:26 by tkiwiber          #+#    #+#             */
-/*   Updated: 2020/12/12 18:32:12 by tkiwiber         ###   ########.fr       */
+/*   Updated: 2020/12/12 19:53:34 by tkiwiber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,50 @@ int		ft_write_test(char *str)
 	ret = read(ft_write_pipe[0], buf, 512);
 	buf[ret] = '\0';
 	if (!strcmp(buf, str))
-		printf("" GREEN "[OK] " RESET "");
+		printf(YELLOW "%s" GREEN "[OK] " RESET "\n", str);
 	else
-		printf("" RED "[KO] " RESET "");
+		printf(YELLOW "%s" RED "[KO] " RESET "", str);
 	close(ft_write_pipe[1]);
 	close(ft_write_pipe[0]);
 	return (0);
+}
+
+int		ft_read_test(char *str)
+{
+	int		ft_write_pipe[2];
+	char	buf[512];
+	int		ret;
+
+	bzero(buf, 512);
+	if (pipe(ft_write_pipe) < 0)
+		exit(EXIT_FAILURE);
+	fcntl(ft_write_pipe[0], F_SETFL, O_NONBLOCK);
+	write(ft_write_pipe[1], str, strlen(str));
+	ret = ft_read(ft_write_pipe[0], buf, 512);
+	buf[ret] = '\0';
+	if (!strcmp(buf, str))
+		printf(YELLOW "%s" GREEN "[OK] " RESET "\n", str);
+	else
+		printf(YELLOW "%s" RED "[KO] " RESET "", str);
+	close(ft_write_pipe[1]);
+	close(ft_write_pipe[0]);
+	return (0);
+}
+
+int		ft_strdup_test(char *str)
+{
+	char	*str1;
+	char	*str2;
+
+	str1 = ft_strdup(str);
+	str2 = strdup(str);
+	if (!strcmp(str1, str2))
+		printf(YELLOW "%s" GREEN "[OK] " RESET "\n", str);
+	else
+		printf(YELLOW "%s" RED "[KO] " RESET "", str);
+	free(str1);
+	free(str2);
+	return (1);
 }
 
 int			main(void)
@@ -119,8 +157,34 @@ int			main(void)
 	printf("[ERROR %10d]\n", errno);	ft_write(-1, "sdaf", 4);
 	printf("[ERROR %10d]\n", errno);	ft_write(-1, NULL, 1);
 
-	ft_write_test("test");
-	ft_write_test("test allo");
-	ft_write_test("test allo \0 what");
+	ft_write_test(ch1);
+	ft_write_test(ch2);
+	ft_write_test(ch3);
+	ft_write_test(ch4);
+	ft_write_test(ch5);
+
+	printf("\n*********** "BLUE"READ"RESET" test start: \n\n");
+	
+	ft_write(1, NULL, -1);
+	printf("[ERROR %10d]\n", errno);	ft_write_test("");
+	printf("[ERROR %10d]\n", errno);	ft_write(-1, "sdaf", 4);
+	printf("[ERROR %10d]\n", errno);	ft_write(-1, NULL, 1);
+
+	ft_read_test(ch1);
+	ft_read_test(ch2);
+	ft_read_test(ch3);
+	ft_read_test(ch4);
+	ft_read_test(ch5);
+
+	printf("\n*********** "BLUE"STRDUP"RESET" test start: \n\n");
+
+	ft_strdup_test(ch1);
+	ft_strdup_test(ch2);
+	ft_strdup_test(ch3);
+	ft_strdup_test(ch4);
+	ft_strdup_test(ch5);
+	//strdup(NULL);
+	//ft_strdup_test(NULL);
+
 	return (0);
 }
