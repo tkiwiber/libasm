@@ -6,12 +6,13 @@
 /*   By: tkiwiber <alex_orlov@goodiez.app>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/28 11:55:26 by tkiwiber          #+#    #+#             */
-/*   Updated: 2020/12/12 19:53:34 by tkiwiber         ###   ########.fr       */
+/*   Updated: 2020/12/12 21:10:14 by tkiwiber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"libasm.h"
 
+#define		BUFF 32768
 int		ft_strlen_test(char *src)
 {
 	int 	ret1;
@@ -20,22 +21,22 @@ int		ft_strlen_test(char *src)
 	ret1 = ft_strlen(src);
 	ret2 = strlen(src);
 	if (ret1 == ret2)
-		printf("Test_str = "YELLOW"[%s]"RESET" " GREEN " ... \
-		OK!!!\n" RESET, src);
+		printf("Test_str [%lu] = "YELLOW"[%s]"RESET" " GREEN " ... \
+		OK!!!\n" RESET, ft_strlen(src), src);
 	else
-		printf("Test_str = "YELLOW"[%s]"RESET" " RED " ... KO!\
-		!!\n" RESET, src);
+		printf("Test_str [%lu]= "YELLOW"[%s]"RESET" " RED " ... KO!\
+		!!\n" RESET, ft_strlen(src), src);
 	return (0);
 }
 
 int		ft_strcpy_test(char *src)
 {
-	char	dest1[512];
-	char	dest2[512];
+	char	dest1[BUFF];
+	char	dest2[BUFF];
 
-	bzero(dest1, 512);
-	bzero(dest2, 512);
-	ft_strcpy(dest1, src);
+	bzero(dest1, BUFF);
+	bzero(dest2, BUFF);
+	strcpy(dest1, src);
 	strcpy(dest2, src);
 	if (!strcmp(dest1, dest2))
 		printf("Test_str = "YELLOW"[%s]"RESET" " GREEN " ... \
@@ -63,15 +64,15 @@ int		ft_strcmp_test(char *s1, char *s2)
 int		ft_write_test(char *str)
 {
 	int		ft_write_pipe[2];
-	char	buf[512];
+	char	buf[BUFF];
 	int		ret;
 
-	bzero(buf, 512);
+	bzero(buf, BUFF);
 	if (pipe(ft_write_pipe) < 0)
 		exit(EXIT_FAILURE);
 	fcntl(ft_write_pipe[0], F_SETFL, O_NONBLOCK);
 	ft_write(ft_write_pipe[1], str, strlen(str));
-	ret = read(ft_write_pipe[0], buf, 512);
+	ret = read(ft_write_pipe[0], buf, BUFF);
 	buf[ret] = '\0';
 	if (!strcmp(buf, str))
 		printf(YELLOW "%s" GREEN "[OK] " RESET "\n", str);
@@ -85,15 +86,15 @@ int		ft_write_test(char *str)
 int		ft_read_test(char *str)
 {
 	int		ft_write_pipe[2];
-	char	buf[512];
+	char	buf[BUFF];
 	int		ret;
 
-	bzero(buf, 512);
+	bzero(buf, BUFF);
 	if (pipe(ft_write_pipe) < 0)
 		exit(EXIT_FAILURE);
 	fcntl(ft_write_pipe[0], F_SETFL, O_NONBLOCK);
 	write(ft_write_pipe[1], str, strlen(str));
-	ret = ft_read(ft_write_pipe[0], buf, 512);
+	ret = ft_read(ft_write_pipe[0], buf, BUFF);
 	buf[ret] = '\0';
 	if (!strcmp(buf, str))
 		printf(YELLOW "%s" GREEN "[OK] " RESET "\n", str);
@@ -126,15 +127,28 @@ int			main(void)
 	char *ch2 = "\t \n\n gsgfdd \ewrtert";
 	char *ch3 = "";
 	char *ch4 = "      ";
-	char *ch5 = "321V DEDFS 3ndm 12312		sdsfasv EPWQKEVMALSD><V/m23.3/1\
-	rm!><DVSA>KBNVADFKNF!$K#!L:NR@#gv3 2 $";
+	char *ch5 = "Sed ut perspiciatis, unde omnis iste natus error sit volupta\
+	tem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae\
+	ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, \
+	explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut \
+	odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione volu\
+	ptatem sequi nesciunt, neque porro quisquam est, qui dolorem ipsum, quia \
+	dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius m\
+	odi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptat\
+	em. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis \
+	suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis aute\
+	m vel eum iure reprehenderit, qui in ea voluptate velit esse, quam nihil \
+	molestiae consequatur, vel illum, qui dolorem eum fugiat, quo voluptas nu\
+	lla pariatur? At vero eos et accusamus et iusto odio dignissimos ducimus,\
+	 qui blanditiis praesentium voluptatum deleniti atque corrupti, quos dolo\
+	 res et quas molestias excepturi sint, obcaecati cupiditate non provident.";
 	
-	printf("\n*********** "BLUE"STRCPY"RESET" test start: \n\n");
-	ft_strcpy_test(ch1);
-	ft_strcpy_test(ch2);
-	ft_strcpy_test(ch3);
-	ft_strcpy_test(ch4);
-	ft_strcpy_test(ch5);
+	printf("\n*********** "BLUE"STRLEN"RESET" test start: \n\n");
+	ft_strlen_test(ch1);
+	ft_strlen_test(ch2);
+	ft_strlen_test(ch3);
+	ft_strlen_test(ch4);
+	ft_strlen_test(ch5);
 
 	printf("\n*********** "BLUE"STRCPY"RESET" test start: \n\n");
 	ft_strcpy_test(ch1);
@@ -147,8 +161,8 @@ int			main(void)
 	ft_strcmp_test("Hello\05 dsf", "Hello\200 dsf");
 	ft_strcmp_test("dsaf dsafm/43r43 fw sda", "dsaf dsafm/43r43 fw sda");
 	ft_strcmp_test("", "");
-	ft_strcmp_test("  ", "  ");
-	ft_strcmp_test("\xff\x80", "\xff\x00");
+	ft_strcmp_test("  ", " safasd");
+	//ft_strcmp_test("\xff\x80", "\xff\x00");
 
 	printf("\n*********** "BLUE"WRITE"RESET" test start: \n\n");
 	

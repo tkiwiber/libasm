@@ -33,7 +33,7 @@ clean:
 	rm -f $(OBJS)
 
 run: all
-	@$(CC) $(CFLAGS) -I./$(HEADER) libasm.a main.c -o $(BIN)
+	@$(CC) $(CFLAGS) -I./$(HEADER) -L. -lasm main.c -o $(BIN)
 	@./run_libasm
 
 fclean: clean
